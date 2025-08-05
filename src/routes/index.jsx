@@ -1,11 +1,28 @@
 import HomeTemplate from "../pages/HomeTemplate";
 import AdminTemplate from "../pages/AdminTemplate";
 import { Route } from "react-router-dom";
+import HomePage from "../pages/HomeTemplate/HomePage";
+import ListMoviesPage from "../pages/HomeTemplate/ListMoviesPage";
+import AboutPage from "../pages/HomeTemplate/AboutPage";
 
 const routes = [
   {
     path: "",
     element: HomeTemplate,
+    nested: [
+      {
+        path: "",
+        element: HomePage,
+      },
+      {
+        path: "list-movies",
+        element: ListMoviesPage,
+      },
+      {
+        path: "about",
+        element: AboutPage,
+      },
+    ],
   },
   {
     path: "admin",
