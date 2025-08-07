@@ -10,7 +10,7 @@ export default function Header() {
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img
-              src="./../../../../public/images/logo.png"
+              src="images/logo.png"
               className="h-8"
               alt="Movie"
             />

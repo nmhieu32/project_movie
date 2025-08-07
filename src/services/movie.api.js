@@ -19,3 +19,12 @@ export const getListMoviesAPI = async (maNhom) => {
     console.log("🍃 ~ getListMovies ~ error:", error);
   }
 };
+
+export const getTheaterSystemApi = async () => {
+  try {
+    const response = await api.get("QuanLyRap/LayThongTinHeThongRap");
+    return response.data.content;
+  } catch (error) {
+    console.log("🍃 ~ error:", error);
+  }
+};
