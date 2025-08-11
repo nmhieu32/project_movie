@@ -1,35 +1,76 @@
+import { useQuery } from "@tanstack/react-query";
+import { getTheaterDetailApi } from "../../../../services/movie.api";
+import FooterSkeleton from "../Skeleton/footer.skeleton";
+
 export default function Footer() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["footer-partner"],
+    queryFn: () => getTheaterDetailApi("GP02"),
+  });
+
+  if (isLoading) return <FooterSkeleton />;
+  if (isError) {
+    return (
+      <footer className="bg-[#15222B] text-white py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-red-400 font-medium">
+            ⚠️ Không thể tải dữ liệu footer. Vui lòng thử lại sau.
+          </p>
+        </div>
+      </footer>
+    );
+  }
+
   return (
-    <div>
-      
+    <footer className="bg-[#15222B] text-white py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-6">
+          <div className="flex flex-col items-center md:items-start">
+            <img
+              src="./images/logo.png"
+              alt="Logo"
+              className="size-20 mb-2 rounded-[50%]"
+            />
+          </div>
+          <div className="flex flex-col items-center md:items-start">
+            <h3 className="text-sm font-semibold mb-2">PARTNER</h3>
+            <div className="flex gap-4">
+              {data?.map((item) => (
+                <img key={item.maHeThongRap}
+                  src={item.logo}
+                  alt="Partner 1"
+                  className="h-10 w-10 rounded-full bg-white"
+                />
+              ))}
+            </div>
+          </div>
 
-<footer className="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4">
-  <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
-    <div className="sm:flex sm:items-center sm:justify-between">
-      <a href="https://flowbite.com/" className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-        <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-      </a>
-      <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
-        <li>
-          <a href="#" className="hover:underline me-4 md:me-6">About</a>
-        </li>
-        <li>
-          <a href="#" className="hover:underline me-4 md:me-6">Privacy Policy</a>
-        </li>
-        <li>
-          <a href="#" className="hover:underline me-4 md:me-6">Licensing</a>
-        </li>
-        <li>
-          <a href="#" className="hover:underline">Contact</a>
-        </li>
-      </ul>
-    </div>
-    <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-    <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" className="hover:underline">Flowbite™</a>. All Rights Reserved.</span>
-  </div>
-</footer>
-
-    </div>
+          <div className="flex flex-col items-center md:items-start">
+            <h3 className="text-sm font-semibold mb-2">Link</h3>
+            <div className="flex flex-col gap-4">
+              <a
+                href="http://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Facebook
+              </a>
+              <a
+                href="http://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Instagram
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-gray-600 mt-6 pt-4 text-xs text-center md:text-left">
+          ©2025 All rights reserved
+        </div>
+      </div>
+    </footer>
   );
 }

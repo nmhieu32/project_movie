@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Movie from "./Movie";
 import { getListMoviesAPI } from "../../../../services/movie.api";
-import SkeletonCard from "../../_components/Skeleton/SkeletonCard";
+import SkeletonCard from "../../_components/Skeleton/card.theater";
 import { useState } from "react";
 
 export default function ListMovie() {
@@ -71,19 +71,19 @@ export default function ListMovie() {
 
   return (
     <div className="container mx-auto w-4/5">
-      <ul className="flex mt-10 ml-6">
+      <ul className="flex ml-6">
         {tabs.map((tab) => (
           <li key={tab.id}>
             <button
               type="button"
               className={`cursor-pointer ${
                 activeTabs === tab.id
-                  ? "text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                  : "text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                  ? "text-white bg-orange-600 hover:bg-orange-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                  : "text-black bg-gray-200 hover:bg-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
               }`}
               onClick={() => setTabs(tab.id)}
             >
-              {tab.label}
+              {tab.label === "Hot" ? `${tab.label} 🔥` : `${tab.label}`}
             </button>
           </li>
         ))}

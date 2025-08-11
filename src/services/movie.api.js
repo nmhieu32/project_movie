@@ -20,11 +20,13 @@ export const getListMoviesAPI = async (maNhom) => {
   }
 };
 
-export const getTheaterSystemApi = async () => {
+export const getTheaterDetailApi = async ( maNhom) => {
   try {
-    const response = await api.get("QuanLyRap/LayThongTinHeThongRap");
+    const response = await api.get(
+      `/QuanLyRap/LayThongTinLichChieuHeThongRap?maNhom=${maNhom}`
+    );
     return response.data.content;
   } catch (error) {
-    console.log("🍃 ~ error:", error);
+    console.log("🍃 ~ getTheaterDetail ~ error:", error);
   }
 };

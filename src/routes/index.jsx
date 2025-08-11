@@ -4,6 +4,8 @@ import { Route } from "react-router-dom";
 import HomePage from "../pages/HomeTemplate/HomePage";
 import ListMoviesPage from "../pages/HomeTemplate/ListMoviesPage";
 import AboutPage from "../pages/HomeTemplate/AboutPage";
+import LoginPage from "../pages/HomeTemplate/LoginPage";
+import RegisterPage from "../pages/HomeTemplate/RegisterPage";
 
 const routes = [
   {
@@ -21,6 +23,14 @@ const routes = [
       {
         path: "about",
         element: AboutPage,
+      },
+      {
+        path: "login",
+        element: LoginPage,
+      },
+      {
+        path: "register",
+        element: RegisterPage,
       },
     ],
   },
