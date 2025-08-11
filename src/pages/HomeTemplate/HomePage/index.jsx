@@ -5,9 +5,11 @@ import TheaterSystem from "./TheaterSystem";
 export default function HomePage() {
   return (
     <div>
-      <Carousel/>
-      <ListMovie/>
-      <TheaterSystem/>
+      <Carousel />
+      <div className="bg-[url(/images/backgroundListMovie.jpg)] bg-cover bg-center bg-gray-800 bg-blend-multiply">
+        <ListMovie />
+        <TheaterSystem />
+      </div>
     </div>
-  )
+  );
 }

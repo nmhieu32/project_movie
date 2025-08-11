@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBannerApi } from "../../../../services/movie.api";
-import SkeletonBanner from "../../_components/Skeleton/SkeletonBanner";
+import SkeletonBanner from "../../_components/Skeleton/carousel.theater";
 
 export default function Carousel() {
   const {
