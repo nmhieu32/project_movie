@@ -1,6 +1,17 @@
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { clearUser } from "../../../../store/auth.slice";
 
 export default function Header() {
+  const { user } = useSelector((state) => state.authSlice);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    localStorage.clear();
+    dispatch(clearUser());
+    navigate("/login");
+  };
+
   return (
     <div>
       <nav className="bg-black/25 fixed w-full z-20 top-0 start-0 dark:border-gray-600">
@@ -19,18 +30,36 @@ export default function Header() {
             </span>
           </NavLink>
           <div className="flex md:order-2 space-x-3 md:space-x-3 rtl:space-x-reverse">
-            <NavLink
-              to="/login"
-              className="text-white bg-orange-700 hover:bg-orange-800 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer"
-            >
-              Login
-            </NavLink>
-            <NavLink
-              to="./register"
-              className="text-orange-700 bg-white border border-orange-700 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer"
-            >
-              Register
-            </NavLink>
+            {user ? (
+              <>
+                <span className="text-white font-bold rounded-lg text-sm px-4 py-2">
+                  {`Hi, ${user.taiKhoan}`}
+                </span>
+
+                <button
+                  onClick={handleLogOut}
+                  className="text-orange-700 bg-white border border-orange-700 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer"
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="/login"
+                  className="text-white bg-orange-700 hover:bg-orange-800 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer"
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="./register"
+                  className="text-orange-700 bg-white border border-orange-700 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer"
+                >
+                  Register
+                </NavLink>
+              </>
+            )}
+
             <button
               data-collapse-toggle="navbar-sticky"
               type="button"

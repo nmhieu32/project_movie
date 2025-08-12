@@ -6,6 +6,7 @@ import ListMoviesPage from "../pages/HomeTemplate/ListMoviesPage";
 import AboutPage from "../pages/HomeTemplate/AboutPage";
 import LoginPage from "../pages/HomeTemplate/LoginPage";
 import RegisterPage from "../pages/HomeTemplate/RegisterPage";
+import NotFoundPage from "../pages/HomeTemplate/NotFoundPage";
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: "admin",
     element: AdminTemplate,
+  },
+  {
+    path: "*",
+    element: NotFoundPage,
   },
 ];
 
