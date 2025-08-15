@@ -1,9 +1,19 @@
-import { useState } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "../../../services/auth.api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../store/auth.slice";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+
+const schema = z.object({
+  taiKhoan: z.string().nonempty("Username is required."),
+  matKhau: z
+    .string()
+    .nonempty("Password is required.")
+    .min(1, "Password must be at least 1 characters."),
+});
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -22,25 +32,24 @@ export default function LoginPage() {
     },
   });
 
-  const [values, setValues] = useState({
-    taiKhoan: "",
-    matKhau: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      taiKhoan: "",
+      matKhau: "",
+    },
+    resolver: zodResolver(schema),
   });
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (values) => {
     handleLogin(values);
+
   };
 
-const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.maLoaiNguoiDung === "QuanTri") {
     return <Navigate to="/admin" />;
   }
@@ -55,18 +64,22 @@ const user = JSON.parse(localStorage.getItem("user"));
           Login
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               User name
             </label>
             <input
               name="taiKhoan"
-              onChange={handleOnChange}
               placeholder="Enter your username..."
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              {...register("taiKhoan")}
             />
+            {errors?.taiKhoan?.message && (
+              <span className="font-medium text-sm text-red-800">
+                {errors.taiKhoan.message}
+              </span>
+            )}
           </div>
 
           <div>
@@ -76,11 +89,15 @@ const user = JSON.parse(localStorage.getItem("user"));
             <input
               type="password"
               name="matKhau"
-              onChange={handleOnChange}
               placeholder="Enter your password..."
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              {...register("matKhau")}
             />
+            {errors?.matKhau?.message && (
+              <span className="font-medium text-sm text-red-800">
+                {errors.matKhau.message}
+              </span>
+            )}
           </div>
 
           <button

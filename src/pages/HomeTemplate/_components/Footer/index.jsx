@@ -27,7 +27,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-6">
           <div className="flex flex-col items-center md:items-start">
             <img
-              src="./images/logo.png"
+              src="/images/logo.png"
               alt="Logo"
               className="size-20 mb-2 rounded-[50%]"
             />
