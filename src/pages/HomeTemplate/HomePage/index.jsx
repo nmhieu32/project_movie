@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import Carousel from "./Carousel";
 import ListMovie from "./ListMovie";
 import TheaterSystem from "./TheaterSystem";

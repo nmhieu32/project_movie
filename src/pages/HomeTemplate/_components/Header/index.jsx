@@ -21,7 +21,7 @@ export default function Header() {
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img
-              src="images/logo.png"
+              src="/images/logo.png"
               className="size-15 rounded-4xl"
               alt="Movie"
             />
@@ -103,18 +103,7 @@ export default function Header() {
                   Home
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  to="list-movies"
-                  className={({ isActive }) =>
-                    isActive
-                      ? "my-active"
-                      : "block py-2 px-3 text-white rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-0 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                  }
-                >
-                  Movies
-                </NavLink>
-              </li>
+
               <li>
                 <NavLink
                   to="about"
@@ -125,6 +114,18 @@ export default function Header() {
                   }
                 >
                   About
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="contact"
+                  className={({ isActive }) =>
+                    isActive
+                      ? "my-active"
+                      : "block py-2 px-3 text-white rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-0 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  }
+                >
+                  Contact
                 </NavLink>
               </li>
             </ul>

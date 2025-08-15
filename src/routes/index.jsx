@@ -2,11 +2,12 @@ import HomeTemplate from "../pages/HomeTemplate";
 import AdminTemplate from "../pages/AdminTemplate";
 import { Route } from "react-router-dom";
 import HomePage from "../pages/HomeTemplate/HomePage";
-import ListMoviesPage from "../pages/HomeTemplate/ListMoviesPage";
 import AboutPage from "../pages/HomeTemplate/AboutPage";
 import LoginPage from "../pages/HomeTemplate/LoginPage";
 import RegisterPage from "../pages/HomeTemplate/RegisterPage";
 import NotFoundPage from "../pages/HomeTemplate/NotFoundPage";
+import ContactPage from "../pages/HomeTemplate/ContactPage";
+import MovieDetailsPage from "../pages/HomeTemplate/MovieDetailsPage";
 
 const routes = [
   {
@@ -18,8 +19,8 @@ const routes = [
         element: HomePage,
       },
       {
-        path: "list-movies",
-        element: ListMoviesPage,
+        path: "contact",
+        element: ContactPage,
       },
       {
         path: "about",
@@ -32,6 +33,10 @@ const routes = [
       {
         path: "register",
         element: RegisterPage,
+      },
+      {
+        path: "movie-details/:movieId",
+        element: MovieDetailsPage,
       },
     ],
   },
