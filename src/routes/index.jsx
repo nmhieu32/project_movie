@@ -8,6 +8,7 @@ import RegisterPage from "../pages/HomeTemplate/RegisterPage";
 import NotFoundPage from "../pages/HomeTemplate/NotFoundPage";
 import ContactPage from "../pages/HomeTemplate/ContactPage";
 import MovieDetailsPage from "../pages/HomeTemplate/MovieDetailsPage";
+import BoxDetailsPage from "../pages/HomeTemplate/BoxDetailsPage";
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
       {
         path: "movie-details/:movieId",
         element: MovieDetailsPage,
+      },
+      {
+        path: "box-details/:showtimeId",
+        element: BoxDetailsPage,
       },
     ],
   },
