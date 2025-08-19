@@ -33,7 +33,6 @@ export default function ListMovie() {
   } = useQuery({
     queryKey: ["list-movies", currentPage],
     queryFn: () => getListMoviesAPI("GP01", currentPage, { hot: true }),
-    keepPreviousData: true, //chặn giật màn hình
   });
 
   const renderMovies = (filterFn) => {

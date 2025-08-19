@@ -9,7 +9,7 @@ export const getBannerApi = async () => {
   }
 };
 
-export const getListMoviesAPI = async (maNhom,currentPage) => {
+export const getListMoviesAPI = async (maNhom, currentPage) => {
   try {
     const response = await api.get(
       `/QuanLyPhim/LayDanhSachPhimPhanTrang?maNhom=${maNhom}&soTrang=${currentPage}&soPhanTuTrenTrang=12`
@@ -34,10 +34,21 @@ export const getTheaterDetailApi = async (maNhom) => {
 export const getMovieDetailsApi = async (movieId) => {
   try {
     const response = await api.get(
-      `QuanLyPhim/LayThongTinPhim?MaPhim=${movieId}`
+      `QuanLyRap/LayThongTinLichChieuPhim?MaPhim=${movieId}`
     );
     return response.data.content;
   } catch (error) {
     console.log("🍃 ~ getMovieDetailsApi ~ error:", error);
+  }
+};
+
+export const getListTicketRoomApi = async (showtimeId) => {
+  try {
+    const response = await api.get(
+      `QuanLyDatVe/LayDanhSachPhongVe?MaLichChieu=${showtimeId}`
+    );
+    return response.data.content;
+  } catch (error) {
+    console.log("🍃 ~ getListTicketRoomApi ~ error:", error);
   }
 };
