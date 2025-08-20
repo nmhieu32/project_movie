@@ -179,7 +179,7 @@ export default function MovieDetailsPage() {
                   <div className="flex justify-between">
                     <span>Release Date:</span>
                     <span className="text-white">
-                      {format(movie.ngayKhoiChieu, "MM/dd/yyyy")}
+                      {format(movie.ngayKhoiChieu, "dd/MM/yyyy")}
                     </span>
                   </div>
                 </div>
@@ -304,9 +304,15 @@ export default function MovieDetailsPage() {
                      border border-gray-300 rounded-lg shadow-sm
                      hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50 
                      transition cursor-pointer"
-                          onClick={() =>
-                            navigate(`/box-details/${lich.maLichChieu}`)
-                          }
+                          onClick={() => {
+                            const userLocal = JSON.parse(localStorage.getItem("user"));
+                            if (userLocal) {
+                              return navigate(
+                                `/box-details/${lich.maLichChieu}`
+                              );
+                            }
+                            navigate("/login");
+                          }}
                         >
                           {format(lich.ngayChieuGioChieu, "hh:mm a")}
                         </button>
