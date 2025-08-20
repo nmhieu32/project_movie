@@ -32,28 +32,27 @@ const bookingTiketSlice = createSlice({
           (item) => item.tenGhe === row.tenGhe
         );
         if (isSelected) {
-            return { ...row, daDat: true };
-          }
-          return row;
-        // const updateDanhSachGhe = row.danhSachGhe.map((ghe) => {
-        //   const isSelected = state.billTicket.some(
-        //     (item) => item.tenGhe === ghe.tenGhe
-        //   );
-        //   if (isSelected) {
-        //     return { ...ghe, daDat: true };
-        //   }
-        //   return ghe;
-        // });
-        // return { ...row, danhSachGhe: updateDanhSachGhe };
+          return { ...row, daDat: true };
+        }
+        return row;
       });
-      state.billTicket = action.payload;
+      state.billTicket = [];
       state.totalMoney = 0;
-      alert("Đã đặt vé thành công. Chúc bạn xem phim vui vẻ !");
+      alert("Ticket booked successfully. Wish you have fun watching the movie!");
+    },
+    onDelete: (state) => {
+      state.billTicket =[];
+      state.totalMoney = 0;
     },
   },
 });
 
-export const { chairSelected, chairUnselected, onSubmitTicket, setListChair } =
-  bookingTiketSlice.actions;
+export const {
+  chairSelected,
+  chairUnselected,
+  onSubmitTicket,
+  setListChair,
+  onDelete,
+} = bookingTiketSlice.actions;
 
 export const bookingTiketReducer = bookingTiketSlice.reducer;
