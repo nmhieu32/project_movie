@@ -5,7 +5,6 @@ export default function Chair() {
   const dispatch = useDispatch();
 
   const listChair = useSelector((state) => state.bookingTiketReducer.listChair);
-  console.log("🍃 ~ Chair ~ listChair:", listChair);
 
   const billTicket = useSelector(
     (state) => state.bookingTiketReducer.billTicket

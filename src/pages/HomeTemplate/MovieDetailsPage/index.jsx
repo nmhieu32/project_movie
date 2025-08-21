@@ -4,6 +4,7 @@ import { getMovieDetailsApi } from "../../../services/movie.api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Calendar, Heart, Play, Share2, Star } from "lucide-react";
 import { useState } from "react";
+import MovieDetailSkeleton from "../_components/Skeleton/movieDetail.skeleton";
 
 export default function MovieDetailsPage() {
   const { movieId } = useParams();
@@ -24,7 +25,7 @@ export default function MovieDetailsPage() {
     enabled: !!movieId,
   });
 
-  if (!movie) return;
+  if (isLoading || !movie) return <MovieDetailSkeleton />;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -305,7 +306,9 @@ export default function MovieDetailsPage() {
                      hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50 
                      transition cursor-pointer"
                           onClick={() => {
-                            const userLocal = JSON.parse(localStorage.getItem("user"));
+                            const userLocal = JSON.parse(
+                              localStorage.getItem("user")
+                            );
                             if (userLocal) {
                               return navigate(
                                 `/box-details/${lich.maLichChieu}`
