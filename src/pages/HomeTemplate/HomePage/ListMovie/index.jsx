@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import Movie from "./Movie";
 import { getListMoviesAPI } from "../../../../services/movie.api";
 import SkeletonCard from "../../_components/Skeleton/card.theater";
 import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ListMovie() {
   const [activeTabs, setTabs] = useState("all");
@@ -33,6 +34,7 @@ export default function ListMovie() {
   } = useQuery({
     queryKey: ["list-movies", currentPage],
     queryFn: () => getListMoviesAPI("GP01", currentPage, { hot: true }),
+    placeholderData: keepPreviousData,
   });
 
   const renderMovies = (filterFn) => {
@@ -54,25 +56,40 @@ export default function ListMovie() {
   }
 
   return (
-    <div className="container mx-auto w-4/5">
-      <ul className="flex ml-6">
-        {tabs.map((tab) => (
-          <li key={tab.id}>
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+          MOVIES
+        </h1>
+        <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto rounded-full"></div>
+      </div>
+
+      <div className="mb-8">
+        <div className="flex flex-wrap justify-center gap-2 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+          {tabs.map((tab) => (
             <button
+              key={tab.id}
               type="button"
-              className={`cursor-pointer ${
+              className={`px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 transform hover:scale-105 ${
                 activeTabs === tab.id
-                  ? "text-white bg-orange-600 hover:bg-orange-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                  : "text-black bg-gray-200 hover:bg-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25"
+                  : "text-gray-600 bg-gray-50 hover:bg-gray-100 hover:text-orange-600"
               }`}
               onClick={() => setTabs(tab.id)}
             >
-              {tab.label === "Hot" ? `${tab.label} 🔥` : `${tab.label}`}
+              {tab.label === "Hot" ? (
+                <span className="flex items-center gap-2">
+                  {tab.label} <span className="text-lg">🔥</span>
+                </span>
+              ) : (
+                tab.label
+              )}
             </button>
-          </li>
-        ))}
-      </ul>
-      <div className="grid grid-cols-6 gap-4 mx-6">
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 mb-12">
         {activeTabs === "all" && renderMovies()}
         {activeTabs === "hot" && renderMovies((m) => m.hot)}
         {activeTabs === "nowShowing" && renderMovies((m) => m.dangChieu)}
@@ -80,54 +97,60 @@ export default function ListMovie() {
       </div>
 
       {movie?.totalPages > 1 && (
-        <nav aria-label="Page navigation" className="flex justify-center mt-6">
-          <ul className="inline-flex items-center -space-x-px">
-            <li>
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-                className={`px-3 py-2 ml-0 leading-tight border border-gray-700 rounded-l-lg transition-colors duration-200 ${
-                  currentPage === 1
-                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-800 text-gray-300 hover:bg-orange-500 hover:text-white"
-                }`}
-              >
-                Previous
-              </button>
-            </li>
+        <div className="flex justify-center">
+          <nav className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2">
+            <ul className="flex items-center space-x-1">
+              <li>
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((prev) => prev - 1)}
+                  className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
+                    currentPage === 1
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-50 text-gray-600 hover:bg-orange-500 hover:text-white hover:shadow-md"
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">Previous</span>
+                </button>
+              </li>
 
-            {Array.from({ length: movie.totalPages }, (_, i) => i + 1).map(
-              (page) => (
-                <li key={page}>
-                  <button
-                    onClick={() => setCurrentPage(page)}
-                    className={`px-3 py-2 leading-tight border border-gray-700 transition-colors duration-200 ${
-                      currentPage === page
-                        ? "bg-orange-600 text-white"
-                        : "bg-gray-800 text-gray-300 hover:bg-orange-500 hover:text-white"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                </li>
-              )
-            )}
+              <div className="flex items-center space-x-1 mx-2">
+                {Array.from({ length: movie.totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <li key={page}>
+                      <button
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-10 h-10 rounded-xl font-medium text-sm transition-all duration-200 ${
+                          currentPage === page
+                            ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25"
+                            : "bg-gray-50 text-gray-600 hover:bg-orange-500 hover:text-white hover:shadow-md"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    </li>
+                  )
+                )}
+              </div>
 
-            <li>
-              <button
-                disabled={currentPage === movie.totalPages}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-                className={`px-3 py-2 leading-tight border border-gray-700 rounded-r-lg transition-colors duration-200 ${
-                  currentPage === movie.totalPages
-                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-800 text-gray-300 hover:bg-orange-500 hover:text-white"
-                }`}
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
+              <li>
+                <button
+                  disabled={currentPage === movie.totalPages}
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                  className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
+                    currentPage === movie.totalPages
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-50 text-gray-600 hover:bg-orange-500 hover:text-white hover:shadow-md"
+                  }`}
+                >
+                  <span className="hidden sm:inline">Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
       )}
     </div>
   );

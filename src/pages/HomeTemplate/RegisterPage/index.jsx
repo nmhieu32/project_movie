@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
-import { Navigate, NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { registerApi } from "../../../services/auth.api";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 
 const schema = z.object({
   hoTen: z
@@ -44,12 +45,25 @@ export default function RegisterPage() {
     },
     resolver: zodResolver(schema),
   });
+  const navigate = useNavigate()
+
+  const { mutate: fetchRegisterApi } = useMutation({
+    mutationFn: (values) => registerApi(values),
+    onSuccess: (data) => {
+      if (data) {
+        alert("Registration successful!");
+        navigate("/login");
+      }
+    },
+    onError: () => {
+      alert("Registration failed. Please try again.");
+    },
+  });
 
   const errors = formState.errors;
 
   const onSubmit = (values) => {
-    registerApi(values);
-    <Navigate to="/login" />;
+    fetchRegisterApi(values);
   };
 
   const user = JSON.parse(localStorage.getItem("user"));

@@ -26,13 +26,17 @@ export default function Header() {
               alt="Movie"
             />
             <span className="self-center text-white text-2xl font-semibold whitespace-nowrap dark:text-white">
-              Movie Ticket
+              CineMax
             </span>
           </NavLink>
           <div className="flex md:order-2 space-x-3 md:space-x-3 rtl:space-x-reverse">
             {user ? (
               <>
-                <span className="text-white font-bold rounded-lg text-sm px-4 py-2">
+                <span
+                  className="text-white font-bold rounded-lg text-sm px-4 py-2 hover:text-orange-700 cursor-pointer"
+                  onClick={() => navigate("/profile")}
+                  title="Personal Infomation"
+                >
                   {`Hi, ${user.taiKhoan}`}
                 </span>
 

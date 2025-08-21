@@ -12,7 +12,7 @@ export default function AboutPage() {
 
         <div>
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            About Movie Ticket
+            About CineMax
           </h2>
           <p className="text-gray-300 mb-4">
             Movie Ticket is your ultimate destination for booking movie seats

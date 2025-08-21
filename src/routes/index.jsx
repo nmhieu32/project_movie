@@ -9,6 +9,7 @@ import NotFoundPage from "../pages/HomeTemplate/NotFoundPage";
 import ContactPage from "../pages/HomeTemplate/ContactPage";
 import MovieDetailsPage from "../pages/HomeTemplate/MovieDetailsPage";
 import BoxDetailsPage from "../pages/HomeTemplate/BoxDetailsPage";
+import ProfilePage from "../pages/HomeTemplate/ProfilePage";
 
 const routes = [
   {
@@ -42,6 +43,10 @@ const routes = [
       {
         path: "box-details/:showtimeId",
         element: BoxDetailsPage,
+      },
+      {
+        path: "profile",
+        element: ProfilePage,
       },
     ],
   },
