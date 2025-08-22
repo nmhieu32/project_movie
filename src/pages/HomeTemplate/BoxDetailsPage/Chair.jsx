@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { chairSelected, chairUnselected } from "../../../store/booking.slice";
+import { chairSelected, chairUnselected, setListChair } from "../../../store/booking.slice";
+import { useEffect } from "react";
 
 export default function Chair() {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { Camera, Edit2 } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getInfoPersonalApi } from "../../../services/user.api";
 import ProfileSkeleton from "./../_components/Skeleton/profile.skeleton";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,7 +50,7 @@ export default function Profile() {
                 </h2>
                 <button
                   onClick={() => dispatch(setIsEditModalOpen(true))}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
                 >
                   <Edit2 className="w-4 h-4 mr-2" />
                   Edit

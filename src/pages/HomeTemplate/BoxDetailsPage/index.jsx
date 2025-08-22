@@ -15,6 +15,7 @@ export default function BoxDetailsPage() {
     data: listChair,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["ticket-room", showtimeId],
     queryFn: () => getListTicketRoomApi(showtimeId),
@@ -37,6 +38,13 @@ export default function BoxDetailsPage() {
     return <SkeletonBooking />;
   }
 
+  if (isError)
+    return (
+      <div className="text-center text-red-500 mt-20">
+        Failed to load seat data. Please try again later.
+      </div>
+    );
+
   return (
     <div className="list-chair min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 pt-24">
       <div className="max-w-7xl mx-auto">
@@ -52,7 +60,7 @@ export default function BoxDetailsPage() {
           <Chair />
 
           {/* Right Side - Movie Info & Tickets */}
-          <ListChairSelected listChair={listChair} showtimeId={showtimeId} />
+          <ListChairSelected listChair={listChair} showtimeId={showtimeId} refetch={refetch}/>
         </div>
       </div>
     </div>

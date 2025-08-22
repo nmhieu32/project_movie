@@ -1,9 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  chairUnselected,
-  onDelete,
-  onSubmitTicket,
-} from "../../../store/booking.slice";
+import { chairUnselected, onDelete } from "../../../store/booking.slice";
 import {
   Calendar,
   Clock,
@@ -14,16 +10,27 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { bookingApi } from "../../../services/ticket.api";
 
 export default function ListChairSelected(props) {
-  const { listChair } = props;
+  const { listChair, refetch } = props;
   const dispatch = useDispatch();
-  const billTicket = useSelector(
-    (state) => state.bookingTiketReducer.billTicket
+  const { billTicket, totalMoney } = useSelector(
+    (state) => state.bookingTiketReducer
   );
-  const totalMoney = useSelector(
-    (state) => state.bookingTiketReducer.totalMoney
-  );
+
+  const { mutate } = useMutation({
+    mutationFn: (ticket) => bookingApi(ticket),
+    onSuccess: (data) => {
+      alert(data);
+      dispatch(onDelete());
+      refetch();
+    },
+    onError: (error) => {
+      console.log("🍃 ~ ListChairSelected ~ error:", error);
+    },
+  });
 
   const changeMoneyVND = (money) => {
     return money?.toLocaleString("vi-VN");
@@ -36,11 +43,17 @@ export default function ListChairSelected(props) {
   };
 
   const handleOnSubmit = () => {
-    dispatch(onSubmitTicket());
+    const ticket = {
+      maLichChieu: movieInfo.maLichChieu,
+      danhSachVe: billTicket.map((ticket) => ({
+        maGhe: ticket.maGhe,
+        giaVe: ticket.giaVe,
+      })),
+    };
+    mutate(ticket);
   };
   return (
     <div className="space-y-6">
-      {/* Movie Information */}
       <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
           <h2 className="text-xl font-bold text-yellow-400 flex items-center">
@@ -113,7 +126,9 @@ export default function ListChairSelected(props) {
             <div className="text-center py-8">
               <CreditCard className="w-12 h-12 text-gray-500 mx-auto mb-3" />
               <p className="text-gray-400">No seats have been selected yet</p>
-              <p className="text-gray-500 text-sm">Click on the chair to select</p>
+              <p className="text-gray-500 text-sm">
+                Click on the chair to select
+              </p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -177,7 +192,7 @@ export default function ListChairSelected(props) {
             className={`w-full py-4 rounded-lg font-bold text-lg transition-all duration-300 ${
               billTicket.length === 0
                 ? "bg-gray-600/50 text-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black shadow-lg hover:shadow-xl hover:scale-105"
+                : "bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer"
             }`}
           >
             {billTicket.length === 0
@@ -187,7 +202,6 @@ export default function ListChairSelected(props) {
         </div>
       </div>
 
-      {/* Quick Stats */}
       {billTicket.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 text-center">
