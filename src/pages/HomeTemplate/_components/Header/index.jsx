@@ -25,7 +25,7 @@ export default function Header() {
               className="size-15 rounded-4xl"
               alt="Movie"
             />
-            <span className="self-center text-white text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center bg-gradient-to-r from-orange-400 to-orange-600 text-2xl font-bold whitespace-nowrap dark:text-white bg-clip-text text-transparent">
               CineMax
             </span>
           </NavLink>
