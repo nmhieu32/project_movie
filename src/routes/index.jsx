@@ -11,6 +11,11 @@ import MovieDetailsPage from "../pages/HomeTemplate/MovieDetailsPage";
 import BoxDetailsPage from "../pages/HomeTemplate/BoxDetailsPage";
 import ProfilePage from "../pages/HomeTemplate/ProfilePage";
 
+import Dashboard from "../pages/AdminTemplate/Dashboard";
+import UserProfile from "../pages/AdminTemplate/UserProfile";
+import UserManager from "../pages/AdminTemplate/UserManager";
+import MovieManager from "../pages/AdminTemplate/MovieManager";
+
 const routes = [
   {
     path: "",
@@ -53,6 +58,24 @@ const routes = [
   {
     path: "admin",
     element: AdminTemplate,
+    nested:[
+      {
+        path: "user-manager",
+        element: UserManager,
+      },
+       {
+        path: "movie-manager",
+        element: MovieManager,
+      },
+       {
+        path: "user-profile",
+        element: UserProfile,
+      },
+       {
+        path: "dashboard",
+        element: Dashboard,
+      }
+    ]
   },
   {
     path: "*",

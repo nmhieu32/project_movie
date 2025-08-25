@@ -52,3 +52,44 @@ export const getListTicketRoomApi = async (showtimeId) => {
     console.log("🍃 ~ getListTicketRoomApi ~ error:", error);
   }
 };
+export const getAllListMovie = async ()=>{
+  try {
+    const response = await api.get(
+      `QuanLyPhim/LayDanhSachPhim?maNhom=GP01`
+    );
+    return response.data.content;
+  } catch (error) {
+    console.log("🍃 ~ getListTicketRoomApi ~ error:", error);
+  }
+}
+export const postMovie = async (frmValue)=>{
+  try {
+    const response = await api.post(
+      `QuanLyPhim/ThemPhimUploadHinh`, frmValue
+    );
+    return response.data.content;
+  } catch (error) {
+    console.log("🍃 ~ getListTicketRoomApi ~ error:", error);
+  }
+}
+export const putMovie = async (frmValue)=>{
+  try {
+    const response = await api.post(
+      `QuanLyPhim/CapNhatPhimUpload`, frmValue
+    );
+    return response.data.content;
+  } catch (error) {
+    console.log("🍃 ~ getListTicketRoomApi ~ error:", error);
+  }
+}
+export const deleteMovie = async (MaPhim)=>{
+  try {
+    const response = await api.delete(
+      `QuanLyPhim/XP?MaPhim=${MaPhim}`
+    );
+    return response.data.content;
+  } catch (error) {
+    console.log("🍃 ~ getListTicketRoomApi ~ error:", error);
+  }
+}
+

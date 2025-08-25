@@ -25,7 +25,7 @@ export default function LoginPage() {
       if (!user) return;
       localStorage.setItem("user", JSON.stringify(user));
       dispatch(setUser(user));
-      navigate(user.maLoaiNguoiDung === "QuanTri" ? "/admin" : "/");
+      navigate(user.maLoaiNguoiDung === "QuanTri" ? "/admin/dashboard" : "/");
     },
     onError: () => {
       alert("Login failed");
