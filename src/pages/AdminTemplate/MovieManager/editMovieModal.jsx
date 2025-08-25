@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { format } from "date-fns";
 import "react-toastify/dist/ReactToastify.css";
 
+// ✅ Schema validate
 const movieSchema = z.object({
   tenPhim: z.string().min(1, "Tên phim không được để trống"),
   trailer: z.string().url("Trailer phải là URL hợp lệ").optional().or(z.literal("")),
@@ -27,7 +28,6 @@ export default function EditMovieModal({ movie, onClose, onUpdate }) {
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
   } = useForm({
@@ -37,63 +37,65 @@ export default function EditMovieModal({ movie, onClose, onUpdate }) {
       tenPhim: movie.tenPhim,
       trailer: movie.trailer || "",
       moTa: movie.moTa || "",
-      maNhom: movie.maNhom,
+      maNhom: movie.maNhom || "GP01",
       ngayKhoiChieu: movie.ngayKhoiChieu?.slice(0, 10) || "",
-      status: movie.dangChieu // Sửa: dùng dangChieu thay vì DangChieu
-        ? "dangChieu"
-        : movie.sapChieu // Sửa: dùng sapChieu thay vì SapChieu
-        ? "sapChieu"
-        : "dangChieu",
-      hot: movie.hot || false, // Sửa: dùng hot thay vì Hot
+      status: movie.dangChieu ? "dangChieu" : movie.sapChieu ? "sapChieu" : "dangChieu",
+      hot: movie.hot || false,
       danhGia: movie.danhGia || 0,
     },
   });
 
+  // ✅ Mutation
   const mutation = useMutation({
     mutationFn: putMovie,
-    onSuccess: (data) => {
-      toast.success("Cập nhật phim thành công!");
-      onUpdate(data);
-      onClose();
-    },
-    onError: (error) => {
-      console.error("Update error:", error);
-      toast.error("Cập nhật thất bại! " + (error.response?.data?.message || error.message));
-    },
   });
-const onSubmit = (data) => {
-  const formData = new FormData();
 
-  formData.append("maPhim", movie.maPhim);
-  formData.append("tenPhim", data.tenPhim);
-  formData.append("trailer", data.trailer || "");
-  formData.append("moTa", data.moTa || "");
-  formData.append("maNhom", data.maNhom || "GP01");
-  formData.append(
-    "ngayKhoiChieu",
-    format(new Date(data.ngayKhoiChieu), "dd/MM/yyyy")
-  );
-  formData.append("sapChieu", (data.status === "sapChieu").toString());
-  formData.append("dangChieu", (data.status === "dangChieu").toString());
-  formData.append("hot", data.hot.toString());
-  formData.append("danhGia", (data.danhGia || 0).toString());
+  // ✅ Submit form
+const onSubmit = async (data) => {
+  try {
+    const formData = new FormData();
 
-  if (!file) {
-    toast.error("Vui lòng chọn hình ảnh mới!");
-    return;
+    formData.append("maPhim", movie.maPhim);
+    formData.append("tenPhim", data.tenPhim);
+    formData.append("trailer", data.trailer || "");
+    formData.append("moTa", data.moTa || "");
+    formData.append("maNhom", data.maNhom || "GP01");
+
+    const formattedDate = format(new Date(data.ngayKhoiChieu), "dd/MM/yyyy");
+    formData.append("ngayKhoiChieu", formattedDate);
+
+    // Boolean fields
+    formData.append("sapChieu", data.status === "sapChieu");
+    formData.append("dangChieu", data.status === "dangChieu");
+    formData.append("hot", data.hot);
+
+    formData.append("danhGia", data.danhGia || 0);
+
+    // File (giữ ảnh cũ nếu không chọn mới)
+    if (file) {
+      formData.append("hinhAnh", file, file.name);
+    } else {
+      formData.append("hinhAnh", movie.hinhAnh);
+    }
+
+    // Debug check
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    const result = await mutation.mutateAsync(formData);
+
+    toast.success("Cập nhật phim thành công!");
+    onUpdate(result);
+    onClose();
+  } catch (error) {
+    console.error("Update error:", error);
+    toast.error("Cập nhật thất bại! " + (error.response?.data?.content || error.message));
   }
-  formData.append("hinhAnh", file);
-
-  // Debug
-  for (let pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-  }
-
-  mutation.mutate(formData);
 };
 
 
-
+  // ✅ Xử lý chọn file
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -123,9 +125,7 @@ const onSubmit = (data) => {
                 className="w-full border p-2 rounded"
                 {...register("tenPhim")}
               />
-              {errors.tenPhim && (
-                <p className="text-red-500">{errors.tenPhim.message}</p>
-              )}
+              {errors.tenPhim && <p className="text-red-500">{errors.tenPhim.message}</p>}
             </div>
             <div>
               <input
@@ -134,17 +134,17 @@ const onSubmit = (data) => {
                 className="w-full border p-2 rounded"
                 {...register("trailer")}
               />
-              {errors.trailer && (
-                <p className="text-red-500">{errors.trailer.message}</p>
-              )}
+              {errors.trailer && <p className="text-red-500">{errors.trailer.message}</p>}
             </div>
           </div>
+
           <textarea
             placeholder="Mô tả"
             className="w-full border p-2 rounded"
             rows={3}
             {...register("moTa")}
           />
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <input
@@ -153,39 +153,22 @@ const onSubmit = (data) => {
                 className="w-full border p-2 rounded"
                 {...register("maNhom")}
               />
-              {errors.maNhom && (
-                <p className="text-red-500">{errors.maNhom.message}</p>
-              )}
+              {errors.maNhom && <p className="text-red-500">{errors.maNhom.message}</p>}
             </div>
             <div>
-              <input
-                type="date"
-                className="w-full border p-2 rounded"
-                {...register("ngayKhoiChieu")}
-              />
-              {errors.ngayKhoiChieu && (
-                <p className="text-red-500">{errors.ngayKhoiChieu.message}</p>
-              )}
+              <input type="date" className="w-full border p-2 rounded" {...register("ngayKhoiChieu")} />
+              {errors.ngayKhoiChieu && <p className="text-red-500">{errors.ngayKhoiChieu.message}</p>}
             </div>
           </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div className="flex gap-4">
               <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  value="dangChieu"
-                  {...register("status")}
-                  checked={watch("status") === "dangChieu"}
-                />{" "}
+                <input type="radio" value="dangChieu" {...register("status")} checked={watch("status") === "dangChieu"} />
                 Đang chiếu
               </label>
               <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  value="sapChieu"
-                  {...register("status")}
-                  checked={watch("status") === "sapChieu"}
-                />{" "}
+                <input type="radio" value="sapChieu" {...register("status")} checked={watch("status") === "sapChieu"} />
                 Sắp chiếu
               </label>
             </div>
@@ -193,6 +176,7 @@ const onSubmit = (data) => {
               <input type="checkbox" {...register("hot")} /> Hot
             </label>
           </div>
+
           <div>
             <input
               type="number"
@@ -202,29 +186,20 @@ const onSubmit = (data) => {
               className="w-full border p-2 rounded"
               {...register("danhGia", { valueAsNumber: true })}
             />
-            {errors.danhGia && (
-              <p className="text-red-500">{errors.danhGia.message}</p>
-            )}
+            {errors.danhGia && <p className="text-red-500">{errors.danhGia.message}</p>}
           </div>
+
           <div>
-            <label className="block mb-1">Hình ảnh *</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="w-full"
-            />
+            <label className="block mb-1">Hình ảnh</label>
+            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full" />
             <p className="text-sm text-gray-500 mt-1">
-              {file ? "File mới đã được chọn" : "Sẽ sử dụng ảnh hiện tại nếu không chọn file mới"}
+              {file ? "File mới đã được chọn" : "Sẽ giữ ảnh cũ nếu không chọn file mới"}
             </p>
             {preview && (
-              <img
-                src={preview}
-                alt="Preview"
-                className="mt-2 w-60 h-60 object-cover rounded"
-              />
+              <img src={preview} alt="Preview" className="mt-2 w-60 h-60 object-cover rounded" />
             )}
           </div>
+
           <button
             type="submit"
             className="bg-green-600 text-white px-4 py-2 rounded w-full"

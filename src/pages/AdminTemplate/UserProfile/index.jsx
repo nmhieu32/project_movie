@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import z from "zod";
-import { updateInfoPersonalApi } from "../../../services/user.api";
+import { updateUser } from "../../../services/user.api";
 import { setProfile } from "../../../store/user.slice";
 import { toast } from "react-toastify";
 import { FaUserCircle } from "react-icons/fa";
@@ -28,6 +28,7 @@ const schema = z.object({
   maNhom: z.string().nonempty("Mã nhóm bắt buộc."),
   maLoaiNguoiDung: z.string().nonempty("Mã loại người dùng bắt buộc."),
 });
+
 
 export default function UserProfile() {
   const dispatch = useDispatch();
@@ -60,25 +61,41 @@ export default function UserProfile() {
       reset(profile);
     }
   }, [profile, reset]);
+const { mutate: handleUpdateInfo, isPending } = useMutation({
+  mutationFn: updateUser,
+  onSuccess: (res) => {
+    console.log("🍃 API trả về:", res);
+    alert(res.message || res.content); // ✅ thông báo luôn
 
-  const { mutate: handleUpdateInfo, isPending } = useMutation({
-    mutationFn: (values) => updateInfoPersonalApi(values),
-    onSuccess: (data) => {
-      if (!data) return;
-      dispatch(setProfile(data));
-      localStorage.setItem("user", JSON.stringify(data));
-      toast.success("Cập nhật thông tin thành công!");
+    if (res.statusCode === 200) {
+      dispatch(setProfile(res.content));
+      localStorage.setItem("user", JSON.stringify(res.content));
+      toast.success(res.message);
       setIsEditing(false);
-    },
-    onError: () => {
-      toast.error("Lỗi khi cập nhật thông tin.");
-    },
-  });
+    }
+  },
+  onError: (err) => {
+    console.error("🍃 Lỗi API:", err);
+    alert(err.content || err.message || "Có lỗi xảy ra!"); // ✅ bắt được message content từ BE
+  },
+});
 
-  const onSubmit = (values) => {
-    console.log("🚀 Payload gửi đi:", values); // debug
-    handleUpdateInfo(values);
+
+
+ const onSubmit = (values) => {
+  const payload = {
+    taiKhoan: values.taiKhoan,
+    matKhau: values.matKhau,
+    email: values.email,
+    soDt: values.soDT, // ⚠ map đúng tên trường backend
+    maNhom: values.maNhom,
+    maLoaiNguoiDung: values.maLoaiNguoiDung,
+    hoTen: values.hoTen,
   };
+  console.log("🚀 Payload gửi đi:", payload);
+  handleUpdateInfo(payload);
+};
+
 
   if (!profile) {
     return (

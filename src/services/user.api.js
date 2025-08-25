@@ -43,18 +43,23 @@ export const addUser = async (data) => {
 }
 export const updateUser = async (data) => {
   try {
-    const response = await api.post("QuanLyNguoiDung/CapNhatThongTinNguoiDung", data);
-    return response.data.content;
+    const response = await api.post(
+      "QuanLyNguoiDung/CapNhatThongTinNguoiDung",
+      data
+    );
+    return response.data; 
   } catch (error) {
-    console.log("🍃 ~ updateInfoPersonalApi ~ error:", error);
+    throw error.response?.data || { message: "Lỗi không xác định" };
   }
-}
+};
+
 export const deleteUser = async (TaiKhoan) => {
   try {
     const response = await api.delete(`QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${TaiKhoan}`);
     return response.data.content;
   } catch (error) {
-    console.log("🍃 ~ updateInfoPersonalApi ~ error:", error);
+    // console.log("🍃 ~ deleteUser ~ error:", error);
+    throw error; // ⚡ ném lỗi ra ngoài để mutation bắt được
   }
 }
 export const SearchUser = async (keyValue) => {
