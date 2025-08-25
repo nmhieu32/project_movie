@@ -13,7 +13,7 @@ import { FaUserCircle } from "react-icons/fa";
 const schema = z.object({
   hoTen: z.string().nonempty("Họ tên bắt buộc.").min(2, "Ít nhất 2 ký tự."),
   email: z.string().email("Email không hợp lệ."),
-  soDt: z
+  soDT: z
     .string()
     .regex(/^[0-9]+$/, "Chỉ nhập số điện thoại.")
     .nonempty("Số điện thoại bắt buộc."),
@@ -34,18 +34,12 @@ export default function UserProfile() {
   const { profile } = useSelector((state) => state.userSlice);
   const [isEditing, setIsEditing] = useState(false);
 
-  // ✅ Normalize API response để luôn dùng soDt (d thường)
-  const normalizeProfile = (data) => ({
-    ...data,
-    soDt: data.soDt || data.soDT || "", // convert soDT -> soDt
-  });
-
   // ✅ lấy user từ localStorage nếu redux rỗng
   useEffect(() => {
     if (!profile) {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
-        dispatch(setProfile(normalizeProfile(JSON.parse(storedUser))));
+        dispatch(setProfile(JSON.parse(storedUser)));
       }
     }
   }, [profile, dispatch]);
@@ -70,10 +64,9 @@ export default function UserProfile() {
   const { mutate: handleUpdateInfo, isPending } = useMutation({
     mutationFn: (values) => updateInfoPersonalApi(values),
     onSuccess: (data) => {
-      const normalized = normalizeProfile(data);
-      dispatch(setProfile(normalized));
-      const storedUser = JSON.parse(localStorage.getItem("user")) || {};
-      localStorage.setItem("user", JSON.stringify({ ...storedUser, ...normalized }));
+      if (!data) return;
+      dispatch(setProfile(data));
+      localStorage.setItem("user", JSON.stringify(data));
       toast.success("Cập nhật thông tin thành công!");
       setIsEditing(false);
     },
@@ -114,7 +107,7 @@ export default function UserProfile() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <InfoItem label="Họ tên" value={profile.hoTen} />
-              <InfoItem label="Số điện thoại" value={profile.soDt} /> {/* ✅ dùng soDt */}
+              <InfoItem label="Số điện thoại" value={profile.soDT} />
               <InfoItem label="Tài khoản" value={profile.taiKhoan} />
               <InfoItem label="Mã nhóm" value={profile.maNhom} />
               <InfoItem
@@ -149,10 +142,10 @@ export default function UserProfile() {
                 style={{ borderColor: "#7A85C1" }}
               />
             </FormField>
-            <FormField label="Số ĐT" error={errors.soDt?.message}>
+            <FormField label="Số ĐT" error={errors.soDT?.message}>
               <input
                 type="text"
-                {...register("soDt")}  // ✅ luôn dùng soDt
+                {...register("soDT")}
                 className="w-full p-2 rounded"
                 style={{ borderColor: "#7A85C1" }}
               />
@@ -186,8 +179,9 @@ export default function UserProfile() {
               <input
                 type="text"
                 {...register("taiKhoan")}
+                disabled
                 className="w-full p-2 rounded text-gray-200"
-                style={{ color: "black", borderColor: "#7A85C1" }}
+                style={{ backgroundColor: "#B2B0E8", borderColor: "#7A85C1" }}
               />
             </FormField>
 

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAllUser,
   addUser,
-  updateUser,
+  updateInfoPersonalApi,
   deleteUser,
   SearchUser,
 } from "../../../services/user.api";
@@ -14,12 +14,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// schema validate với zod
+// ✅ schema validate với zod - sửa soDt thành soDT
 const userSchema = z.object({
   taiKhoan: z.string().min(3, "Tài khoản tối thiểu 3 ký tự"),
   matKhau: z.string().min(6, "Mật khẩu tối thiểu 6 ký tự"),
   email: z.string().email("Email không hợp lệ"),
-  soDt: z.string().min(8, "Số điện thoại không hợp lệ"),
+  soDT: z.string().min(8, "Số điện thoại không hợp lệ"), // ✅ sửa soDT
   maNhom: z.string().min(1, "Mã nhóm bắt buộc"),
   maLoaiNguoiDung: z.enum(["QuanTri", "KhachHang"]),
   hoTen: z.string().min(2, "Họ tên tối thiểu 2 ký tự"),
@@ -65,7 +65,7 @@ export default function UserManager() {
 
   // Mutation update
   const updateMutation = useMutation({
-    mutationFn: updateUser,
+    mutationFn: updateInfoPersonalApi,
     onSuccess: () => {
       toast.success("Cập nhật user thành công!");
       queryClient.invalidateQueries(["users"]);
@@ -338,7 +338,7 @@ function UserForm({ title, initialData = {}, onClose, onSubmit }) {
       taiKhoan: initialData.taiKhoan || "",
       matKhau: initialData.matKhau || "123456789aA@",
       email: initialData.email || "",
-      soDt: initialData.soDT || "",
+      soDT: initialData.soDT || "", // ✅ đổi sang soDT
       maNhom: initialData.maNhom || "GP01",
       maLoaiNguoiDung: initialData.maLoaiNguoiDung || "KhachHang",
       hoTen: initialData.hoTen || "",
@@ -351,11 +351,8 @@ function UserForm({ title, initialData = {}, onClose, onSubmit }) {
         <h3 className="text-lg font-bold mb-4">{title}</h3>
         <form
           onSubmit={handleSubmit((data) => {
-            // map soDt -> soDT cho backend
-            const payload = { ...data, soDT: data.soDt };
-            delete payload.soDt;
-            console.log("📦 Submit:", payload);
-            onSubmit(payload);
+            console.log("📦 Submit:", data);
+            onSubmit(data); // gửi đúng soDT
           })}
           className="space-y-3"
         >
@@ -387,10 +384,10 @@ function UserForm({ title, initialData = {}, onClose, onSubmit }) {
           <input
             className="w-full border p-2 rounded"
             placeholder="Số điện thoại"
-            {...register("soDt")}
+            {...register("soDT")} // ✅ đổi sang soDT
           />
-          {errors.soDt && (
-            <p className="text-red-600 text-sm">{errors.soDt.message}</p>
+          {errors.soDT && (
+            <p className="text-red-600 text-sm">{errors.soDT.message}</p>
           )}
           <input
             className="w-full border p-2 rounded"
