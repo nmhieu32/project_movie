@@ -38,26 +38,109 @@
 ## 📁 Cấu Trúc Dự Án
 
 ```
-movie-booking-system/
-├── public/
-│   └── image/           # Hình ảnh tĩnh
-│       ├── movies/      # Poster phim
-│       ├── theaters/    # Hình ảnh rạp chiếu
-│       └── icons/       # Icon và logo
-├── src/
-│   ├── components/      # React components
-│   │   ├── common/      # Components dùng chung
-│   │   ├── layout/      # Layout components
-│   │   └── features/    # Feature-specific components
-│   ├── pages/           # Trang chính
-│   ├── hooks/           # Custom hooks
-│   ├── services/        # API services
-│   ├── store/           # Redux store
-│   ├── utils/           # Utility functions
-│   ├── types/           # TypeScript types
-│   └── styles/          # Global styles
-├── package.json
-└── README.md
+Directory structure:
+└── nmhieu32-project_movie/
+    ├── README.md
+    ├── eslint.config.js
+    ├── index.html
+    ├── package.json
+    ├── Task.xlsx
+    ├── vite.config.js
+    ├── public/
+    │   └── images/
+    └── src/
+        ├── App.css
+        ├── App.jsx
+        ├── index.css
+        ├── main.jsx
+        ├── assets/
+        ├── pages/
+        │   ├── AdminTemplate/
+        │   │   ├── index.jsx
+        │   │   ├── _components/
+        │   │   │   ├── avt.jsx
+        │   │   │   └── navigation.jsx
+        │   │   ├── Dashboard/
+        │   │   │   ├── cinemaStats.jsx
+        │   │   │   ├── filmChart.jsx
+        │   │   │   ├── index.jsx
+        │   │   │   ├── statsCard.jsx
+        │   │   │   └── userStats.jsx
+        │   │   ├── MovieManager/
+        │   │   │   ├── addMovieForm.jsx
+        │   │   │   ├── editMovieModal.jsx
+        │   │   │   ├── index.jsx
+        │   │   │   ├── movieChart.jsx
+        │   │   │   ├── movieList.jsx
+        │   │   │   ├── movieRow.jsx
+        │   │   │   ├── movieStats.jsx
+        │   │   │   └── statCard.jsx
+        │   │   ├── UserManager/
+        │   │   │   ├── index.jsx
+        │   │   │   └── sliderDelete.jsx
+        │   │   └── UserProfile/
+        │   │       └── index.jsx
+        │   └── HomeTemplate/
+        │       ├── index.jsx
+        │       ├── _components/
+        │       │   ├── Footer/
+        │       │   │   └── index.jsx
+        │       │   ├── Header/
+        │       │   │   └── index.jsx
+        │       │   └── Skeleton/
+        │       │       ├── booking.skeleton.jsx
+        │       │       ├── card.theater.jsx
+        │       │       ├── carousel.theater.jsx
+        │       │       ├── footer.skeleton.jsx
+        │       │       ├── movieDetail.skeleton.jsx
+        │       │       ├── profile.skeleton.jsx
+        │       │       └── theater.skeleton.jsx
+        │       ├── AboutPage/
+        │       │   └── index.jsx
+        │       ├── BoxDetailsPage/
+        │       │   ├── Chair.jsx
+        │       │   ├── index.jsx
+        │       │   └── listChairSelected.jsx
+        │       ├── ContactPage/
+        │       │   └── index.jsx
+        │       ├── HomePage/
+        │       │   ├── index.jsx
+        │       │   ├── Carousel/
+        │       │   │   └── index.jsx
+        │       │   ├── ListMovie/
+        │       │   │   ├── index.jsx
+        │       │   │   └── Movie.jsx
+        │       │   └── TheaterSystem/
+        │       │       └── index.jsx
+        │       ├── LoginPage/
+        │       │   └── index.jsx
+        │       ├── MovieDetailsPage/
+        │       │   └── index.jsx
+        │       ├── NotFoundPage/
+        │       │   └── index.jsx
+        │       ├── ProfilePage/
+        │       │   ├── BookingHistory.jsx
+        │       │   ├── index.jsx
+        │       │   ├── Modal.jsx
+        │       │   └── Profile.jsx
+        │       └── RegisterPage/
+        │           └── index.jsx
+        ├── routes/
+        │   └── index.jsx
+        ├── services/
+        │   ├── api.js
+        │   ├── auth.api.js
+        │   ├── cenima.api.js
+        │   ├── movie.api.js
+        │   ├── ticket.api.js
+        │   └── user.api.js
+        └── store/
+            ├── auth.slice.js
+            ├── booking.slice.js
+            ├── index.js
+            ├── theater.slice.js
+            └── user.slice.js
+
 ```
 
 ## 🛠️ Cài Đặt & Chạy Dự Án
