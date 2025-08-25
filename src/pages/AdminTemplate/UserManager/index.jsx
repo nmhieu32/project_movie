@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAllUser,
   addUser,
-  updateInfoPersonalApi,
+  updateUser,
   deleteUser,
   SearchUser,
 } from "../../../services/user.api";
@@ -57,6 +57,7 @@ export default function UserManager() {
   const addMutation = useMutation({
     mutationFn: addUser,
     onSuccess: () => {
+      alert("Thêm user thành công!");
       toast.success("Thêm user thành công!");
       queryClient.invalidateQueries(["users"]);
     },
@@ -64,23 +65,32 @@ export default function UserManager() {
   });
 
   // Mutation update
-  const updateMutation = useMutation({
-    mutationFn: updateInfoPersonalApi,
-    onSuccess: () => {
-      toast.success("Cập nhật user thành công!");
-      queryClient.invalidateQueries(["users"]);
-    },
-    onError: () => toast.error("Cập nhật user thất bại!"),
-  });
+const updateMutation = useMutation({
+  mutationFn: updateUser,
+  onSuccess: () => {
+    alert("✅ Cập nhật user thành công!");
+    queryClient.invalidateQueries(["users"]);
+  },
+  onError: (error) => {
+    // lấy message từ API nếu có
+    const msg =
+      error?.response?.data?.content || "❌ Cập nhật user thất bại!";
+    alert(msg);
+  },
+});
+
 
   // Mutation delete
-  const deleteMutation = useMutation({
-    mutationFn: deleteUser,
+  const {mutate: deleteMutation} = useMutation({
+    mutationFn:(TaiKhoan) =>deleteUser(TaiKhoan),
     onSuccess: () => {
       toast.success("Xóa user thành công!");
       queryClient.invalidateQueries(["users"]);
     },
-    onError: () => toast.error("Xóa user thất bại!"),
+    onError: (error) => {
+      console.log(error.response?.data);
+      alert(error.response?.data.content)
+    },
   });
 
   // Pagination
@@ -275,7 +285,8 @@ export default function UserManager() {
               <button
                 className="px-4 py-2 bg-red-600 rounded text-white"
                 onClick={() => {
-                  deleteMutation.mutate(confirmUser.taiKhoan);
+                  
+                  deleteMutation(confirmUser.taiKhoan);
                   setConfirmUser(null);
                 }}
               >
@@ -360,6 +371,7 @@ function UserForm({ title, initialData = {}, onClose, onSubmit }) {
             className="w-full border p-2 rounded"
             placeholder="Tài khoản"
             {...register("taiKhoan")}
+              disabled={!!initialData.taiKhoan}
           />
           {errors.taiKhoan && (
             <p className="text-red-600 text-sm">{errors.taiKhoan.message}</p>
